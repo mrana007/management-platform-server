@@ -5,7 +5,14 @@ const cors = require('cors');
 const port = process.env.PORT || 5000;
 
 // middleware
-app.use(cors());
+app.use(cors({
+  credentials:true,
+  origin:[
+    'https://management-platform-d720b.web.app',
+    'https://management-platform-d720b.firebaseapp.com',
+    'http://localhost:5173'
+  ]
+}));
 app.use(express.json());
 
 
