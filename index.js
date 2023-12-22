@@ -34,13 +34,32 @@ async function run() {
     // await client.connect();
 
     const todoCollection = client.db("todoDB").collection("tasks");
+    // task api
+    // update
+    app.put("/tasks/:id", async (req, res) => {
+      const id = req.params.id;
+      const tasks = req.body;
+      console.log(tasks);
+      const query = { _id: new ObjectId(id) };
 
+      const updateDoc = {
+        $set: {
+          title: tasks.title,
+          priority: tasks.priority,
+          deadline: tasks.deadline,
+          description: tasks.description,
+        },
+      };
+      const result = await todoCollection.updateOne(query, updateDoc);
+      res.send(result);
+    });
+    // tasks post
     app.post('/tasks', async (req, res) => {
         const task = req.body;
         const result = await todoCollection.insertOne(task);
         res.send(result);
     });
-
+    // tasks get
     app.get('/tasks', async(req, res) =>{
         const result = await todoCollection.find().toArray()
         res.send(result);
